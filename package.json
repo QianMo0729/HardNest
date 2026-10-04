@@ -1,0 +1,18 @@
+{
+  "name": "hardnest-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "edit": "node preview-server.js",
+    "build": "node build/build.mjs",
+    "serve": "node server.js",
+    "validate": "node build/validate.mjs"
+  },
+  "dependencies": {
+    "node-html-parser": "^6.1.13",
+    "playwright-core": "^1.62.1",
+    "sharp": "^0.33.5",
+    "subset-font": "^2.5.0"
+  }
+}

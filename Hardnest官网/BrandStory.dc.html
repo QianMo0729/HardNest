@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:#FBFAF8;font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:10px;}
+::-webkit-scrollbar-track{background:#F1EEE7;}
+::-webkit-scrollbar-thumb{background:rgba(20,19,18,0.22);border-radius:99px;border:2.5px solid #F1EEE7;}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,103,20,0.55);}
+@keyframes heroZoom{from{transform:scale(1.12);}to{transform:scale(1);}}
+::selection{background:#FF6714;color:#0A0908;}
+h1,h2,h3,p{text-wrap:pretty;}
+a{color:#FF6714;}
+a:hover{color:#E8590F;}
+@keyframes heroIn{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes spinSlow{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes storyHint{0%,100%{transform:scaleY(0.3);opacity:0.35;}50%{transform:scaleY(1);opacity:1;}}
+#story-scene{background:#0A0908;}
+.story-panel{position:absolute;opacity:0;pointer-events:none;will-change:opacity,transform;z-index:3;}
+.story-panel-hero{inset:0;display:flex;align-items:center;justify-content:center;text-align:center;}
+#story-card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);opacity:0;pointer-events:none;z-index:2;will-change:opacity,filter;}
+#story-card-frame{height:56vh;aspect-ratio:3/4;border-radius:24px;overflow:hidden;border:1px solid rgba(245,244,242,0.14);box-shadow:0 40px 120px rgba(0,0,0,0.55);background:#141312;}
+#story-final-sub{position:absolute;left:50%;top:calc(50% + 28vh + 26px);width:min(560px,86vw);text-align:center;color:rgba(245,244,242,0.66);font-size:16px;font-weight:300;line-height:1.9;margin:0;opacity:0;pointer-events:none;will-change:opacity,transform;z-index:3;}
+@media(min-width:860px){
+  .story-panel-r{top:50%;right:6vw;width:min(400px,33vw);}
+  .story-panel-l{top:50%;left:6vw;width:min(400px,33vw);}
+  .story-panel-c{left:50%;top:11vh;width:min(600px,64vw);text-align:center;}
+}
+@media(max-width:859px){
+  .story-panel-r,.story-panel-l{left:22px;right:22px;bottom:4.5vh;}
+  .story-panel-c{left:22px;right:22px;top:8.5vh;text-align:center;}
+  #story-rail{display:none;}
+  #story-card{top:45%;}
+  #story-card-frame{height:44vh !important;}
+  #story-final-sub{left:7vw;right:7vw;width:auto;top:calc(45% + 22vh + 18px);}
+}
+</style>
+<script src="./image-slot.js"></script>
+<script src="./story-scene.js"></script>
+</helmet>
+<div style="position:relative;background:#FBFAF8;overflow-x:hidden;overflow-x:clip;font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue',sans-serif;">
+  <dc-import name="SiteNav" active="story" hint-size="100%,74px"></dc-import>
+
+  <section id="story-scene" style="display:none;position:relative;background:#0A0908;">
+    <div id="story-track" style="position:relative;height:740vh;">
+      <div style="position:sticky;top:0;height:100vh;overflow:hidden;background:#0A0908;">
+        <canvas id="story-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+        <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(6,5,4,0.6) 100%);"></div>
+        <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg, rgba(10,9,8,0.45) 0%, transparent 16%);"></div>
+
+        <div class="story-panel story-panel-hero" id="story-act-0">
+          <div style="max-width:880px;padding:0 24px;">
+            <div style="color:#FF8438;font-size:12px;font-weight:500;letter-spacing:0.22em;margin-bottom:22px;">品牌故事</div>
+            <h1 style="color:#F5F4F2;font-family:'Noto Serif SC',serif;font-size:clamp(32px,5.5vw,66px);font-weight:700;letter-spacing:-0.01em;line-height:1.3;margin:0 0 26px;text-shadow:0 2px 30px rgba(0,0,0,0.55);">从一粒粉末，<br />到一件家具。</h1>
+            <p style="color:rgba(245,244,242,0.65);font-size:17.5px;font-weight:300;line-height:1.9;margin:0 auto;max-width:600px;">Hardnest 相信，好的家具不该只考虑人。滚塑工艺，是我们对"共居"这件事最诚实的回答。</p>
+          </div>
+          <div style="position:absolute;left:50%;bottom:42px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:14px;color:rgba(245,244,242,0.55);font-size:12.5px;letter-spacing:0.18em;">
+            <span>向下滚动，见证成型</span>
+            <span style="width:1.5px;height:44px;background:linear-gradient(180deg,#FF8438,transparent);animation:storyHint 1.8s ease-in-out infinite;display:block;transform-origin:top;"></span>
+          </div>
+        </div>
+
+        <div class="story-panel story-panel-r" id="story-act-1">
+          <div style="color:#FF8438;font-size:12px;font-weight:500;letter-spacing:0.22em;margin-bottom:18px;">01 / 粉末填充</div>
+          <h3 style="margin:0 0 14px;color:#F5F4F2;font-size:clamp(24px,2.6vw,34px);font-weight:900;letter-spacing:-0.02em;text-shadow:0 2px 24px rgba(0,0,0,0.5);">精确配比，一次投料。</h3>
+          <p style="margin:0;color:rgba(245,244,242,0.62);font-size:15px;font-weight:300;line-height:1.9;">食品级聚乙烯粉末，按颜色与配方精确投入模具。</p>
+        </div>
+
+        <div class="story-panel story-panel-l" id="story-act-2">
+          <div style="color:#FF8438;font-size:12px;font-weight:500;letter-spacing:0.22em;margin-bottom:18px;">02 / 加热旋转</div>
+          <h3 style="margin:0 0 14px;color:#F5F4F2;font-size:clamp(24px,2.6vw,34px);font-weight:900;letter-spacing:-0.02em;text-shadow:0 2px 24px rgba(0,0,0,0.5);">高温旋转，均匀附着。</h3>
+          <p style="margin:0;color:rgba(245,244,242,0.62);font-size:15px;font-weight:300;line-height:1.9;">模具在高温炉内多轴旋转，粉末均匀熔融附着于内壁。</p>
+        </div>
+
+        <div class="story-panel story-panel-r" id="story-act-3">
+          <div style="color:#FF8438;font-size:12px;font-weight:500;letter-spacing:0.22em;margin-bottom:18px;">03 / 冷却定形</div>
+          <h3 style="margin:0 0 14px;color:#F5F4F2;font-size:clamp(24px,2.6vw,34px);font-weight:900;letter-spacing:-0.02em;text-shadow:0 2px 24px rgba(0,0,0,0.5);">缓慢冷却，稳定定型。</h3>
+          <p style="margin:0;color:rgba(245,244,242,0.62);font-size:15px;font-weight:300;line-height:1.9;">旋转中缓慢冷却，材料收缩定形，形成稳定的一体化结构。</p>
+        </div>
+
+        <div class="story-panel story-panel-c" id="story-act-4">
+          <div style="color:#FF8438;font-size:12px;font-weight:500;letter-spacing:0.22em;margin-bottom:18px;">04 / 脱模成型</div>
+          <h3 style="margin:0;color:#F5F4F2;font-size:clamp(24px,2.8vw,38px);font-weight:900;letter-spacing:-0.02em;text-shadow:0 2px 24px rgba(0,0,0,0.5);">无需拼接，一次成型。</h3>
+        </div>
+
+        <div id="story-card">
+          <div id="story-card-frame">
+            <img src="assets/story-reveal-sofa.jpg" alt="Hardnest 湾 · 黑色亮面共坐沙发窝，猫卧于内置窝舱" style="width:100%;height:100%;object-fit:cover;display:block;">
+          </div>
+        </div>
+        <p id="story-final-sub">开模取出，无需拼接、无需焊接 —— 一件家具，一次成型。</p>
+
+        <div id="story-rail" style="position:absolute;right:34px;top:50%;transform:translateY(-50%);width:2px;height:180px;background:rgba(245,244,242,0.14);border-radius:99px;z-index:4;">
+          <div id="story-rail-fill" style="width:100%;height:0%;background:#FF8438;border-radius:99px;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-story-legacy style="position:relative;min-height:640px;display:flex;align-items:center;background:#0A0908;overflow:hidden;">
+    <image-slot id="story-hero" shape="rect" placeholder="拖入图片：滚塑工艺生产车间 / 原料特写" style="position:absolute;inset:0;width:100%;height:100%;animation:heroZoom 2.8s cubic-bezier(.16,1,.3,1) both;"></image-slot>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(8,7,6,0.55) 0%, rgba(8,7,6,0.8) 100%);pointer-events:none;"></div>
+    <div style="position:relative;max-width:900px;margin:0 auto;padding:150px 24px 90px;text-align:center;">
+      <div style="animation:heroIn 0.9s cubic-bezier(.16,1,.3,1) 0.05s both;color:#FF8438;font-size:12px;font-weight:500;letter-spacing:0.22em;margin-bottom:22px;">品牌故事</div>
+      <h1 style="animation:heroIn 1s cubic-bezier(.16,1,.3,1) 0.15s both;color:#F5F4F2;font-family:'Noto Serif SC',serif;font-size:clamp(32px,5.5vw,66px);font-weight:700;letter-spacing:-0.01em;line-height:1.3;margin:0 0 26px;">从一粒粉末，<br />到一件家具。</h1>
+      <p style="animation:heroIn 1s cubic-bezier(.16,1,.3,1) 0.28s both;color:rgba(245,244,242,0.65);font-size:17.5px;font-weight:300;line-height:1.9;margin:0 auto;max-width:600px;">Hardnest 相信，好的家具不该只考虑人。滚塑工艺，是我们对"共居"这件事最诚实的回答。</p>
+    </div>
+  </section>
+
+  <section data-story-legacy style="background:#FBFAF8;padding:160px 24px;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:90px;">
+        <div data-reveal style="opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1),transform 0.8s cubic-bezier(.16,1,.3,1);color:#FF6714;font-size:12px;font-weight:500;letter-spacing:0.22em;margin-bottom:20px;">01 / 核心工艺</div>
+        <h2 data-reveal style="opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1) 0.1s,transform 0.8s cubic-bezier(.16,1,.3,1) 0.1s;color:#141312;font-size:clamp(30px,4.2vw,52px);font-weight:900;letter-spacing:-0.035em;margin:0;">滚塑成型，四步一体。</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;">
+        <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity 0.7s cubic-bezier(.16,1,.3,1),transform 0.7s cubic-bezier(.16,1,.3,1);padding:0 28px 0 0;">
+          <div style="color:#FF6714;font-size:15px;font-weight:700;margin-bottom:18px;">01</div>
+          <h3 style="margin:0 0 12px;color:#141312;font-size:18.5px;font-weight:700;letter-spacing:-0.01em;">粉末填充</h3>
+          <p style="margin:0;color:#6B655F;font-size:14px;font-weight:300;line-height:1.85;">食品级聚乙烯粉末，按颜色与配方精确投入模具。</p>
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity 0.7s cubic-bezier(.16,1,.3,1) 0.08s,transform 0.7s cubic-bezier(.16,1,.3,1) 0.08s;padding:0 28px;border-left:1px solid rgba(20,19,18,0.1);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+            <span style="color:#FF6714;font-size:15px;font-weight:700;">02</span>
+            <span style="width:14px;height:14px;border-radius:50%;border:1.5px dashed #FF6714;animation:spinSlow 3s linear infinite;display:inline-block;"></span>
+          </div>
+          <h3 style="margin:0 0 12px;color:#141312;font-size:18.5px;font-weight:700;letter-spacing:-0.01em;">加热旋转</h3>
+          <p style="margin:0;color:#6B655F;font-size:14px;font-weight:300;line-height:1.85;">模具在高温炉内多轴旋转，粉末均匀熔融附着于内壁。</p>
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity 0.7s cubic-bezier(.16,1,.3,1) 0.16s,transform 0.7s cubic-bezier(.16,1,.3,1) 0.16s;padding:0 28px;border-left:1px solid rgba(20,19,18,0.1);">
+          <div style="color:#FF6714;font-size:15px;font-weight:700;margin-bottom:18px;">03</div>
+          <h3 style="margin:0 0 12px;color:#141312;font-size:18.5px;font-weight:700;letter-spacing:-0.01em;">冷却定形</h3>
+          <p style="margin:0;color:#6B655F;font-size:14px;font-weight:300;line-height:1.85;">旋转中缓慢冷却，材料收缩定形，形成稳定的一体化结构。</p>
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity 0.7s cubic-bezier(.16,1,.3,1) 0.24s,transform 0.7s cubic-bezier(.16,1,.3,1) 0.24s;padding:0 28px;border-left:1px solid rgba(20,19,18,0.1);">
+          <div style="color:#FF6714;font-size:15px;font-weight:700;margin-bottom:18px;">04</div>
+          <h3 style="margin:0 0 12px;color:#141312;font-size:18.5px;font-weight:700;letter-spacing:-0.01em;">脱模成型</h3>
+          <p style="margin:0;color:#6B655F;font-size:14px;font-weight:300;line-height:1.85;">开模取出，无需拼接、无需焊接——一件家具，一次成型。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#0A0908;padding:160px 24px;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:80px;">
+        <div data-reveal style="opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1),transform 0.8s cubic-bezier(.16,1,.3,1);color:#FF8438;font-size:12px;font-weight:500;letter-spacing:0.22em;margin-bottom:20px;">02 / 对比</div>
+        <h2 data-reveal style="opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1) 0.1s,transform 0.8s cubic-bezier(.16,1,.3,1) 0.1s;color:#F5F4F2;font-size:clamp(28px,4.2vw,48px);font-weight:900;letter-spacing:-0.035em;margin:0;">拼接家具的缝隙里，藏着风险。</h2>
+      </div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;">
+        <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity 0.7s cubic-bezier(.16,1,.3,1),transform 0.7s cubic-bezier(.16,1,.3,1);flex:1 1 320px;min-width:280px;background:rgba(245,244,242,0.04);border:1px solid rgba(245,244,242,0.1);border-radius:24px;padding:44px 40px;">
+          <div style="color:rgba(245,244,242,0.4);font-size:15px;font-weight:600;margin-bottom:28px;">传统拼接家具</div>
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="color:rgba(245,244,242,0.5);font-size:15px;line-height:1.6;">螺丝、卡扣多处拼接</div>
+            <div style="color:rgba(245,244,242,0.5);font-size:15px;line-height:1.6;">缝隙藏毛发与细菌</div>
+            <div style="color:rgba(245,244,242,0.5);font-size:15px;line-height:1.6;">潮湿环境易变形开胶</div>
+            <div style="color:rgba(245,244,242,0.5);font-size:15px;line-height:1.6;">边角可能被啃咬拆解</div>
+          </div>
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity 0.7s cubic-bezier(.16,1,.3,1) 0.1s,transform 0.7s cubic-bezier(.16,1,.3,1) 0.1s;flex:1 1 320px;min-width:280px;background:linear-gradient(160deg, rgba(255,103,20,0.14), rgba(255,103,20,0.03));border:1px solid rgba(255,103,20,0.35);border-radius:24px;padding:44px 40px;">
+          <div style="color:#FF8438;font-size:15px;font-weight:700;margin-bottom:28px;">Hardnest 一体成型</div>
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div style="color:#F5F4F2;font-size:15px;line-height:1.6;font-weight:500;">单一模具，整体成型</div>
+            <div style="color:#F5F4F2;font-size:15px;line-height:1.6;font-weight:500;">表面光滑，没有卫生死角</div>
+            <div style="color:#F5F4F2;font-size:15px;line-height:1.6;font-weight:500;">防水防潮，长期不变形</div>
+            <div style="color:#F5F4F2;font-size:15px;line-height:1.6;font-weight:500;">高强度结构，抗啃咬抓挠</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="position:relative;min-height:600px;background:#0A0908;overflow:hidden;">
+    <image-slot id="story-lifestyle" shape="rect" placeholder="拖入图片：人与宠物共同生活的温暖场景" style="position:absolute;inset:0;width:100%;height:100%;"></image-slot>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,9,8,0.1), rgba(10,9,8,0.85));pointer-events:none;"></div>
+    <div style="position:relative;padding:170px 24px;text-align:center;">
+      <p data-reveal style="opacity:0;transform:translateY(32px);transition:opacity 0.9s cubic-bezier(.16,1,.3,1),transform 0.9s cubic-bezier(.16,1,.3,1);color:#F5F4F2;font-family:'Noto Serif SC',serif;font-size:clamp(26px,3.9vw,48px);font-weight:700;letter-spacing:-0.01em;line-height:1.45;margin:0 0 16px;">我们相信，家不该有主次。</p>
+      <p data-reveal style="opacity:0;transform:translateY(32px);transition:opacity 0.9s cubic-bezier(.16,1,.3,1) 0.15s,transform 0.9s cubic-bezier(.16,1,.3,1) 0.15s;color:rgba(245,244,242,0.55);font-size:16.5px;font-weight:300;line-height:1.9;margin:0;">人宠共居，是一种共同的生活方式，而不是谁将就谁。</p>
+    </div>
+  </section>
+
+  <section style="background:#FBFAF8;padding:160px 24px;">
+    <div style="max-width:900px;margin:0 auto;text-align:center;">
+      <div data-reveal style="opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1),transform 0.8s cubic-bezier(.16,1,.3,1);color:#FF6714;font-size:12px;font-weight:500;letter-spacing:0.22em;margin-bottom:20px;">03 / 材料与安全</div>
+      <h2 data-reveal style="opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1) 0.1s,transform 0.8s cubic-bezier(.16,1,.3,1) 0.1s;color:#141312;font-size:clamp(28px,4.2vw,48px);font-weight:900;letter-spacing:-0.035em;margin:0;">选择对宠物友好的材料。</h2>
+      <p data-reveal style="opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1) 0.2s,transform 0.8s cubic-bezier(.16,1,.3,1) 0.2s;color:#6B655F;font-size:17px;font-weight:300;line-height:2;margin:36px auto 0;max-width:680px;">Hardnest 采用滚塑级食品级聚乙烯 —— 这是户外家具、皮划艇等长期风吹日晒场景中广泛验证的材料：不含双酚 A，不含重金属添加剂，耐紫外线老化，宠物啃咬也不会释放有害物质。</p>
+      <div data-reveal style="opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1) 0.3s,transform 0.8s cubic-bezier(.16,1,.3,1) 0.3s;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:40px;">
+        <span style="background:#F1EEE7;color:#141312;font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:999px;">食品级材料</span>
+        <span style="background:#F1EEE7;color:#141312;font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:999px;">不含双酚 A</span>
+        <span style="background:#F1EEE7;color:#141312;font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:999px;">耐紫外线</span>
+        <span style="background:#F1EEE7;color:#141312;font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:999px;">材料可回收</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#F1EEE7;padding:150px 24px;text-align:center;">
+    <div data-reveal style="opacity:0;transform:translateY(30px);transition:opacity 0.8s cubic-bezier(.16,1,.3,1),transform 0.8s cubic-bezier(.16,1,.3,1);max-width:680px;margin:0 auto;">
+      <h2 style="color:#141312;font-size:clamp(28px,4.2vw,50px);font-weight:900;letter-spacing:-0.035em;margin:0 0 32px;line-height:1.3;">想了解更多制造细节？</h2>
+      <a href="Contact.dc.html" style="background:#141312;color:#F5F4F2;padding:16px 40px;border-radius:999px;font-size:15.5px;font-weight:700;text-decoration:none;display:inline-block;transition:transform 0.35s cubic-bezier(.16,1,.3,1),background 0.3s ease;" style-hover="background:#FF6714;transform:scale(1.05);">联系我们</a>
+    </div>
+  </section>
+
+  <dc-import name="SiteFooter" hint-size="100%,420px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this._observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          this._observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('[data-reveal]').forEach(el => this._observer.observe(el));
+
+    /* The scroll scene ships as a classic script in the helmet, which may
+       finish loading after mount — poll briefly, then init. No StoryScene
+       (or reduced motion, or no canvas) leaves the static fallback as-is. */
+    this._sceneTries = 0;
+    this._sceneTimer = setInterval(() => {
+      this._sceneTries++;
+      if (window.StoryScene) {
+        clearInterval(this._sceneTimer);
+        this._sceneTimer = null;
+        this._destroyScene = window.StoryScene.init() || null;
+      } else if (this._sceneTries > 50) {
+        clearInterval(this._sceneTimer);
+        this._sceneTimer = null;
+      }
+    }, 100);
+  }
+
+  componentWillUnmount() {
+    if (this._observer) this._observer.disconnect();
+    if (this._sceneTimer) clearInterval(this._sceneTimer);
+    if (this._destroyScene) this._destroyScene();
+  }
+
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
